@@ -1,106 +1,98 @@
-# 🌐 Translation & Localization Service
+# 🧪 A/B Testing & UI Experimentation Service
 
-This service provides multilingual support for displaying receipt data based on the user's region. It uses `i18next` for managing language files and `Intl` for currency and date formatting.
+A backend service to test and analyze the performance of different QR code templates (or UI formats) by serving them randomly and tracking user interactions. Built with Node.js and MongoDB.
 
 ---
 
-## 🚀 Features
+## 🎯 Purpose
 
-- 🔄 Auto-select language based on POS region (e.g., `IN` → Hindi, `US` → English)
-- 🌍 Multi-language support using `i18next`
-- 💱 Local currency and date formatting
-- 🧾 Translate 10 receipt fields (title, store name, date, items, total, etc.)
-- ⚙️ Configuration via `.env` file
+To help teams experiment with multiple UI/QR code variations and automatically determine which performs best based on real user engagement (e.g., opens, shares).
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Node.js**
-- **Express.js**
-- **i18next**
-- **i18next-fs-backend**
-- **dotenv**
-- **Intl API** (built-in)
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB (Mongoose)
+- **Others:** dotenv, cors
 
 ---
 
-## 📁 Project Structure
+## 🚀 Key Features
 
-translation-service/
-├── index.js # Main Express server
-├── i18n.js # i18next configuration
-├── locales/ # Translation JSON files
-│ ├── en.json
-│ └── hi.json
-├── utils/
-│ └── formatter.js # Currency and date formatting
-├── .env # Environment variables
-├── .gitignore
-├── LICENSE
-├── package.json
-└── README.md
+- 🎲 Randomly serve 2 active templates
+- 📝 Track user events like `open` and `share`
+- 📊 Generate reports showing which template performed better
 
 ---
 
-## 📦 Setup Instructions
+## ⚙️ Setup Instructions
 
-1. **Clone the repo**
+1. **Clone the Repository**
+     ```bash
 
-```bash
-git clone https://github.com/Sumit-TGT/translation-service.git
-cd translation-service
-
+       git clone https://github.com/sumit-TGT/ab-testing-service.git
+       cd ab-testing-service
 
 2. Install Dependencies
-npm install
+   npm install
 
-3. Create a .env file
-PORT=3000
-STORE_NAME=TGT-Supermart
-DEFAULT_REGION=IN
+3. Configure Environment
+    Create a .env file in the root:
+    ```bash
 
-4. Run the Server
-npm start
+     PORT=3000
+     MONGO_URI=mongodb://localhost:27017/ab_test_db
 
-🌐 Usage
-Visit:
-http://localhost:3000/receipt?region=IN
-http://localhost:3000/receipt?region=US
+4. Run the server 
+   npm start
 
-The receipt will be returned in the appropriate language with localized date and currency.
+📡 API Endpoints
+🔁 Serve Random Templates
+GET /api/templates/pair?userId=123
 
-🧪 Example Output (Hindi)
+Returns two random active templates and logs an exposure event for that user.
+
+🧩 Track User Engagement
+POST /api/templates/track
+
+```bash
 {
-  "रसीद": {
-    "दुकान का नाम": "Supermart",
-    "तारीख": "15 जुलाई 2025",
-    "समय": "12:45:20 अपराह्न",
-    "ग्राहक": "Ravi Kumar",
-    "आइटम": [
-      {
-        "आइटम": "Shampoo",
-        "मात्रा": 2,
-        "कीमत": "₹199.99"
-      },
-      {
-        "आइटम": "Toothpaste",
-        "मात्रा": 1,
-        "कीमत": "₹49.99"
-      }
-    ],
-    "कुल राशि": "₹449.97",
-    "हमसे खरीदारी करने के लिए धन्यवाद!": ""
-  }
+  "templateId": "TEMPLATE_OBJECT_ID",
+  "userId": "USER_ID",
+  "eventType": "open"   // or "share"
+}
 
+📊 Report on Template Performance
+GET /api/templates/report
 
-📜 License
-This project is licensed under the MIT License.
+Returns a breakdown of how many open and share events each template received.
 
-👨‍💻 Author
-Sumit Kumar
-[TerraGidTech]
+🌱 Seeding the Database
+Run this to insert sample templates:
+```bash
+node seed/seed.js
 
+📁 Project Structure
+.
+├── app.js
+├── .env
+├── .gitignore
+├── LICENSE
+├── README.md
+├── seed/
+│   └── seed.js
+├── models/
+│   ├── Template.js
+│   └── Event.js
+├── controllers/
+│   └── templateController.js
+├── services/
+│   └── templateService.js
+└── routes/
+    └── templateRoutes.js
 
-
-
+    👨‍💻 Author
+Built by [Sumit Kumar]
+     Terra Grid Tech
+ 
